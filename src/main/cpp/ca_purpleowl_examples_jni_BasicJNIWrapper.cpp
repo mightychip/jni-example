@@ -3,12 +3,15 @@
 //
 
 #include <string>
-#include "basicCalc.h"
 #include "ca_purpleowl_examples_jni_BasicJNIWrapper.h"
+#include "basicCalc.h"
+#include "simpleFunction.h"
 
 JNIEXPORT jstring JNICALL Java_ca_purpleowl_examples_jni_BasicJNIWrapper_genericHello
         (JNIEnv *env, jobject) {
-    const char* greeting = "Hello";
+    //We'll just implement a simple method here.  This is the very basic thing that
+    //led me down the path of learning JNI!
+    const char* greeting = sayHello();
     return env->NewStringUTF(greeting);
 }
 
@@ -27,4 +30,26 @@ JNIEXPORT jint JNICALL Java_ca_purpleowl_examples_jni_BasicJNIWrapper_addNumbers
 JNIEXPORT jint JNICALL Java_ca_purpleowl_examples_jni_BasicJNIWrapper_subtractNumbers
         (JNIEnv *, jobject, jint numOne, jint numTwo) {
     return basicCalc::subtract(numOne, numTwo);
+}
+
+JNIEXPORT jstring JNICALL Java_ca_purpleowl_examples_jni_BasicJNIWrapper_concatenateMe
+        (JNIEnv *env, jobject, jobjectArray array) {
+    std::string sentence;
+    int count = env->GetArrayLength(array);
+    for(int i=0; i < count; i++) {
+        //We're going to need to cast here... we know this is an array of strings, anyways.
+        auto element = (jstring)env->GetObjectArrayElement(array, i);
+        if(env->ExceptionOccurred()) {
+            //Oops, we did something bad!!
+            break;
+        }
+
+        std::string word = env->GetStringUTFChars(element, nullptr);
+
+        sentence += word + " ";
+
+        env->DeleteLocalRef(element);
+    }
+
+    return env->NewStringUTF(sentence.c_str());
 }

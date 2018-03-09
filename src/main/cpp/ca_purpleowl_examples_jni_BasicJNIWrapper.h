@@ -41,11 +41,11 @@ JNIEXPORT jint JNICALL Java_ca_purpleowl_examples_jni_BasicJNIWrapper_subtractNu
 
 /*
  * Class:     ca_purpleowl_examples_jni_BasicJNIWrapper
- * Method:    oneMore
- * Signature: (I)I
+ * Method:    concatenateMe
+ * Signature: ([Ljava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jint JNICALL Java_ca_purpleowl_examples_jni_BasicJNIWrapper_oneMore
-  (JNIEnv *, jobject, jint);
+JNIEXPORT jstring JNICALL Java_ca_purpleowl_examples_jni_BasicJNIWrapper_concatenateMe
+  (JNIEnv *, jobject, jobjectArray);
 
 #ifdef __cplusplus
 }

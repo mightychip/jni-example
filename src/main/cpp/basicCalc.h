@@ -1,5 +1,5 @@
 //
-// Created by Jordan Heath on 2018-02-21.
+// Created by Mighty Chip on 2018-02-21.
 //
 
 #ifndef CPP_BASICCALC_H
