@@ -1,10 +1,17 @@
 package ca.purpleowl.examples.jni;
 
 /**
- * TODO Add some JavaDoc.
+ * This is a super simple JNI implementation.  I wanted to get an example out there that was at least somewhat recent.
+ * Nothing seems to really have changed in recent years with JNI, but given that the native plugin is now using
+ * deprecated commands, there's probably some changes coming in the next version of Java.
+ *
+ * The native methods are used with javac -h to generate a header.  That header is implemented in C++ with some very
+ * simple code.  This is enough to show you how JNI works and to get you up and running.
  */
 public class BasicJNIWrapper implements Runnable {
 
+    //These stubs are used to generate the header and automagically link to the native implementation of that header
+    //as long as you load the library that implementation was compiled into.
     private native String genericHello();
     private native String personalHello(String name);
     private native int addNumbers(int numOne, int numTwo);

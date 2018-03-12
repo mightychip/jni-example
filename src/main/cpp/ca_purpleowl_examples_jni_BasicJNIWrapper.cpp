@@ -17,8 +17,11 @@ JNIEXPORT jstring JNICALL Java_ca_purpleowl_examples_jni_BasicJNIWrapper_generic
 
 JNIEXPORT jstring JNICALL Java_ca_purpleowl_examples_jni_BasicJNIWrapper_personalHello
         (JNIEnv *env, jobject, jstring name) {
+    //Here we're just handling some string manipulation.  Note that you need to use env to "translate" jstring into
+    //something that C++ can work with.
     std::string cName = env->GetStringUTFChars(name, nullptr);
     cName = "Hello " + cName + "!";
+    //Here, you have to translate back into jstrings to satisfy Java.
     return env->NewStringUTF(cName.c_str());
 }
 
@@ -35,12 +38,15 @@ JNIEXPORT jint JNICALL Java_ca_purpleowl_examples_jni_BasicJNIWrapper_subtractNu
 JNIEXPORT jstring JNICALL Java_ca_purpleowl_examples_jni_BasicJNIWrapper_concatenateMe
         (JNIEnv *env, jobject, jobjectArray array) {
     std::string sentence;
+    //Handling arrays is a bit of a pain.  First, you'll need to get the length...
     int count = env->GetArrayLength(array);
+    //Now you're going to use that length to make a counted loop.
     for(int i=0; i < count; i++) {
-        //We're going to need to cast here... we know this is an array of strings, anyways.
+        //You work through the array one element at a time.  Make sure to cast the element from
+        //a jobject into something meaningful.
         auto element = (jstring)env->GetObjectArrayElement(array, i);
         if(env->ExceptionOccurred()) {
-            //Oops, we did something bad!!
+            //Oops, we did something bad!!  You should be regularly checking for exceptions like this.
             break;
         }
 
@@ -48,6 +54,8 @@ JNIEXPORT jstring JNICALL Java_ca_purpleowl_examples_jni_BasicJNIWrapper_concate
 
         sentence += word + " ";
 
+        //When you are done, remember to delete any local references you make.  You can only have 16 local
+        //references by default (unless you ask for more), so not deleting them means you'll end up running out.
         env->DeleteLocalRef(element);
     }
 
